@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>For You 🤍</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI',sans-serif;
+}
+
+body{
+    background:radial-gradient(circle at top,#111,#000);
+    color:white;
+    height:100vh;
+    overflow:hidden;
+}
+
+/* PAGES */
+.page{
+    display:none;
+    height:100vh;
+    width:100vw;
+    justify-content:center;
+    align-items:center;
+    flex-direction:column;
+    text-align:center;
+    padding:20px;
+}
+
+.page.active{
+    display:flex;
+}
+
+/* TEXT */
+.text{
+    font-size:1.7rem;
+    line-height:1.6;
+}
+
+/* INPUT */
+input{
+    margin-top:15px;
+    padding:12px;
+    border:none;
+    border-radius:8px;
+    font-size:1rem;
+    text-align:center;
+}
+
+/* BUTTON */
+.btn{
+    margin-top:25px;
+    padding:12px 28px;
+    border:none;
+    border-radius:25px;
+    background:#ffb6c1;
+    color:#111;
+    font-size:1rem;
+    cursor:pointer;
+}
+
+/* SLIDESHOW */
+.slideshow{
+    width:90%;
+    max-width:350px;
+    height:460px;
+    border-radius:20px;
+    overflow:hidden;
+    box-shadow:0 0 20px rgba(255,182,193,0.4);
+}
+
+.slideshow img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    animation:fade 1s;
+}
+
+@keyframes fade{
+    from{opacity:0;}
+    to{opacity:1;}
+}
+
+/* HEARTS */
+.heart{
+    position:absolute;
+    bottom:-20px;
+    color:red;
+    font-size:18px;
+    animation:float linear forwards;
+}
+
+@keyframes float{
+    to{
+        transform:translateY(-110vh) translateX(var(--x));
+        opacity:0;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- 🔊 MUSIC (PUT HERE) -->
+<audio id="music" loop>
+    <source src="song.mp3" type="audio/mpeg">
+</audio>
+
+<!-- 🔐 PAGE 1 : PASSWORD -->
+<div class="page active" id="page1">
+    <div class="text">💌 Enter our special date</div>
+    <input type="password" id="password" placeholder="DD/MM/YYYY">
+    <button class="btn" onclick="checkPassword()">Unlock 🤍</button>
+</div>
+
+<!-- 💬 PAGE 2 -->
+<div class="page" id="page2">
+    <div class="text">
+        From strangers to us 🤍<br>
+        Every moment was worth it.
+    </div>
+    <button class="btn" onclick="nextPage(3)">Next ➜</button>
+</div>
+
+<!-- 📸 PAGE 3 : SLIDESHOW -->
+<div class="page" id="page3">
+    <div class="slideshow">
+        <img id="slide" src="img1.jpg">
+    </div>
+    <button class="btn" onclick="nextPage(4)">Next ➜</button>
+</div>
+
+<!-- ❤️ PAGE 4 -->
+<div class="page" id="page4">
+    <div class="text">
+        Happy Anniversary 🤍<br>
+        I choose you, always.
+    </div>
+</div>
+
+<script>
+/* 🔐 PASSWORD CHECK */
+function checkPassword(){
+    const pass = document.getElementById("password").value;
+    if(pass === "8/FEB/2025"){
+        nextPage(2);
+
+        const music = document.getElementById("music");
+        music.volume = 0.7;
+        music.play().catch(()=>{});
+    } else {
+        alert("Wrong password 💔");
+    }
+}
+
+/* 📄 PAGE CONTROL */
+function nextPage(n){
+    document.querySelectorAll(".page")
+        .forEach(p => p.classList.remove("active"));
+    document.getElementById("page"+n)
+        .classList.add("active");
+}
+
+/* 📸 SLIDESHOW */
+const images = [
+    "img1.jpg","img2.jpg","img3.jpg",
+    "img4.jpg","img5.jpg","img6.jpg",
+    "img7.jpg","img8.jpg","img9.jpg"
+];
+let i = 0;
+
+setInterval(()=>{
+    const slide = document.getElementById("slide");
+    if(slide){
+        i = (i + 1) % images.length;
+        slide.src = images[i];
+    }
+}, 2500);
+
+/* ❤️ HEARTS */
+function createHeart(){
+    const h = document.createElement("div");
+    h.className = "heart";
+    h.innerHTML = "❤";
+    h.style.left = Math.random()*100 + "vw";
+    h.style.animationDuration = (3 + Math.random()*3) + "s";
+    h.style.setProperty("--x",(Math.random()*100-50)+"px");
+    document.body.appendChild(h);
+    setTimeout(()=>h.remove(),6000);
+}
+setInterval(createHeart,300);
+</script>
+
+</body>
+</html>
